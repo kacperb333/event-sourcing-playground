@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Test
-public class EnergyValueSpec {
+public class EnergyValueTest {
 
     public void energyValueOfDishShouldBeEqualToEnergyValuesOfIngredients() {
         int ingredient1kcal = 100;
