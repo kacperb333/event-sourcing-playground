@@ -12,7 +12,7 @@ public class IngredientPreparerTest {
         int cookingKcal = 100;
         int roastingKcal = 250;
 
-        Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(EnergyValue.ofKcal(100));
+        Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(1L, EnergyValue.ofKcal(100));
         Preparable cookedAndRoasted = cookAndRoast(someIngredient, cookingKcal, roastingKcal);
 
         assertEquals(EnergyValue.ofKcal(ingredientKcal + cookingKcal + roastingKcal), cookedAndRoasted.getEnergyValue());
@@ -22,7 +22,7 @@ public class IngredientPreparerTest {
     public void preparingShouldAddProperNamePrefix() {
         String potatoName = "Potato";
 
-        Preparable potato = BasicIngredientFactory.ofNameAndEnergyValue(potatoName, EnergyValue.ofKcal(100));
+        Preparable potato = BasicIngredientFactory.ofNameAndEnergyValue(1L, potatoName, EnergyValue.ofKcal(100));
         Preparable roastedAndCookedPotato = cookAndRoast(potato, 100, 200);
 
         assertEquals("Roasted Cooked Potato", roastedAndCookedPotato.getName());
@@ -30,7 +30,7 @@ public class IngredientPreparerTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Overroasted")
     public void sameImmediatePreparationShouldThrowException() {
-        Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(EnergyValue.ofKcal(100));
+        Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(1L, EnergyValue.ofKcal(100));
 
         Preparable roastedAndCooked = cookAndRoast(someIngredient, 100, 100);
         Preparers.roast(roastedAndCooked, EnergyValue.ofKcal(100));
@@ -38,7 +38,7 @@ public class IngredientPreparerTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Overcooked")
     public void samePreparationAsOneOfPreviousShouldThrowException() {
-        Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(EnergyValue.ofKcal(100));
+        Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(1L, EnergyValue.ofKcal(100));
 
         Preparable roastedAndCooked = cookAndRoast(someIngredient, 100, 100);
         Preparers.cook(roastedAndCooked, EnergyValue.ofKcal(100));

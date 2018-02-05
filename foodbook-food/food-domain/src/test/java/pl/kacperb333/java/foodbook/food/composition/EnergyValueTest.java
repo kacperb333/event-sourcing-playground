@@ -21,9 +21,10 @@ public class EnergyValueTest {
 
     private BasicDish composeDishOfKcal(int... kcalValues) {
         Set<BasicIngredient> ingredients = new HashSet<>();
+        long ordinal = 1;
         for (int kcal : kcalValues) {
             EnergyValue ingredientEnergyValue = EnergyValue.ofKcal(kcal);
-            BasicIngredient ingredient = BasicIngredientFactory.ofEnergyValue(ingredientEnergyValue);
+            BasicIngredient ingredient = BasicIngredientFactory.ofEnergyValue(ordinal++, ingredientEnergyValue);
             ingredients.add(ingredient);
         }
         return BasicDishFactory.ofIngredients(ingredients);
