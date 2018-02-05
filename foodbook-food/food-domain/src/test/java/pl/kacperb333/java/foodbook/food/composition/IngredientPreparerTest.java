@@ -33,7 +33,7 @@ public class IngredientPreparerTest {
         Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(EnergyValue.ofKcal(100));
 
         Preparable roastedAndCooked = cookAndRoast(someIngredient, 100, 100);
-        Preparable overroasted = Preparers.roast(roastedAndCooked, EnergyValue.ofKcal(100));
+        Preparers.roast(roastedAndCooked, EnergyValue.ofKcal(100));
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Overcooked")
@@ -41,7 +41,7 @@ public class IngredientPreparerTest {
         Preparable someIngredient = BasicIngredientFactory.ofEnergyValue(EnergyValue.ofKcal(100));
 
         Preparable roastedAndCooked = cookAndRoast(someIngredient, 100, 100);
-        Preparable overcooked = Preparers.cook(roastedAndCooked, EnergyValue.ofKcal(100));
+        Preparers.cook(roastedAndCooked, EnergyValue.ofKcal(100));
     }
 
     private Preparable cookAndRoast(Preparable toPrepare, int cookingKcal, int roastingKcal) {
