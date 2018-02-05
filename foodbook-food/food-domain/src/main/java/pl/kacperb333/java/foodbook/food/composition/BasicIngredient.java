@@ -4,10 +4,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
-class BasicIngredient {
+class BasicIngredient implements Preparable {
     private final String name;
     private final EnergyValue energyValue;
     private final Category category;
@@ -25,6 +28,23 @@ class BasicIngredient {
         return new BasicIngredient(name, energyValue, category);
     }
 
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Set<Class<? extends Preparable>> alreadyApplied() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public boolean hasApplied(Class<? extends IngredientPreparer> preparerType) {
+        //Basic ingredients themselves are always raw
+        return false;
+    }
+
+    @Override
     public EnergyValue getEnergyValue() {
         return energyValue;
     }
