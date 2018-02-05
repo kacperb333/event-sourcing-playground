@@ -6,9 +6,9 @@ import org.testng.annotations.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-@Test
 public class EnergyValueTest {
 
+    @Test
     public void energyValueOfDishShouldBeEqualToEnergyValuesOfIngredients() {
         int ingredient1kcal = 100;
         int ingredient2kcal = 150;
