@@ -1,4 +1,4 @@
-package pl.kacperb333.java.foodbook.food.composition.dto;
+package pl.kacperb333.java.foodbook.food.composition.ingredients.dto;
 
 import lombok.*;
 

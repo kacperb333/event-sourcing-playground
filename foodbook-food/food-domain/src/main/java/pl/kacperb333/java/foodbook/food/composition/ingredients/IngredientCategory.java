@@ -1,8 +1,8 @@
-package pl.kacperb333.java.foodbook.food.composition;
+package pl.kacperb333.java.foodbook.food.composition.ingredients;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import pl.kacperb333.java.foodbook.food.composition.ingredients.values.IngredientCategoryId;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -11,17 +11,11 @@ import static org.apache.commons.lang3.Validate.notNull;
 @Getter
 class IngredientCategory {
 
-    @RequiredArgsConstructor
-    @Getter
-    static class Identifier {
-        private final Long id;
-    }
-
-    private final Identifier id;
+    private final IngredientCategoryId id;
     private final long version;
     private final String name;
 
-    private IngredientCategory(Identifier id, long version, String name) {
+    private IngredientCategory(IngredientCategoryId id, long version, String name) {
         this.id = id;
         this.version = version;
         this.name = name;
@@ -32,7 +26,7 @@ class IngredientCategory {
         return new IngredientCategory(null, 0L , name);
     }
 
-    public static IngredientCategory from(Identifier id, long version, String name) {
+    public static IngredientCategory from(IngredientCategoryId id, long version, String name) {
         notNull(id);
         notEmpty(name);
         return new IngredientCategory(id, version, name);

@@ -1,11 +1,11 @@
-package pl.kacperb333.java.foodbook.food.composition;
+package pl.kacperb333.java.foodbook.food.composition.values;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-class EnergyValue {
+public class EnergyValue {
     private final int kcalValue;
 
     private EnergyValue(int kcalValue) {

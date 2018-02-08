@@ -1,8 +1,9 @@
-package pl.kacperb333.java.foodbook.food.composition;
+package pl.kacperb333.java.foodbook.food.composition.ingredients;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import pl.kacperb333.java.foodbook.food.composition.dto.CreateIngredientCategoryInput;
+import pl.kacperb333.java.foodbook.food.composition.ingredients.dto.CreateIngredientCategoryInput;
+import pl.kacperb333.java.foodbook.food.composition.ingredients.values.IngredientCategoryId;
 
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -19,7 +20,7 @@ public class IngredientCategoryWriteTest {
 
     @BeforeMethod
     void beforeMethod() {
-        ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database = new ConcurrentHashMap<>();
+        ConcurrentMap<IngredientCategoryId, IngredientCategory> database = new ConcurrentHashMap<>();
 
         readRepository = new TestIngredientCategoryReadRepository(database);
         writeRepository = new TestIngredientCategoryWriteRepository(database);
@@ -32,7 +33,7 @@ public class IngredientCategoryWriteTest {
         String newCategoryName = "New Category";
         CreateIngredientCategoryInput createInput = new CreateIngredientCategoryInput(newCategoryName);
 
-        IngredientCategory.Identifier createdId = facade.createIngredientCategory(createInput);
+        IngredientCategoryId createdId = facade.createIngredientCategory(createInput);
 
         Optional<IngredientCategory> obtained = readRepository.find(createdId);
 

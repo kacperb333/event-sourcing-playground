@@ -1,7 +1,8 @@
-package pl.kacperb333.java.foodbook.food.composition;
+package pl.kacperb333.java.foodbook.food.composition.ingredients;
 
-import pl.kacperb333.java.foodbook.food.composition.dto.CreateIngredientCategoryInput;
-import pl.kacperb333.java.foodbook.food.composition.dto.IngredientCategoryAlreadyExistsException;
+import pl.kacperb333.java.foodbook.food.composition.ingredients.dto.CreateIngredientCategoryInput;
+import pl.kacperb333.java.foodbook.food.composition.ingredients.dto.IngredientCategoryAlreadyExistsException;
+import pl.kacperb333.java.foodbook.food.composition.ingredients.values.IngredientCategoryId;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -16,7 +17,7 @@ final class IngredientCategoryFacade {
         this.readRepository = readRepository;
     }
 
-    public IngredientCategory.Identifier createIngredientCategory(CreateIngredientCategoryInput input) {
+    public IngredientCategoryId createIngredientCategory(CreateIngredientCategoryInput input) {
         notNull(input);
 
         if (readRepository.existsByName(input.getName())) {

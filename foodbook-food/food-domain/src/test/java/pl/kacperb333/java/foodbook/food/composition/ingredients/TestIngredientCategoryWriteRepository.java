@@ -1,14 +1,16 @@
-package pl.kacperb333.java.foodbook.food.composition;
+package pl.kacperb333.java.foodbook.food.composition.ingredients;
+
+import pl.kacperb333.java.foodbook.food.composition.ingredients.values.IngredientCategoryId;
 
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 class TestIngredientCategoryWriteRepository implements IngredientCategoryWriteRepository {
 
-    private final ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database;
+    private final ConcurrentMap<IngredientCategoryId, IngredientCategory> database;
     private final AtomicLong sequence = new AtomicLong(0L);
 
-    public TestIngredientCategoryWriteRepository(ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database) {
+    TestIngredientCategoryWriteRepository(ConcurrentMap<IngredientCategoryId, IngredientCategory> database) {
         this.database = database;
     }
 
@@ -19,7 +21,7 @@ class TestIngredientCategoryWriteRepository implements IngredientCategoryWriteRe
 
     private IngredientCategory create(IngredientCategory toSave) {
         IngredientCategory toCreate = IngredientCategory.from(
-                new IngredientCategory.Identifier(sequence.getAndIncrement()),
+                new IngredientCategoryId(sequence.getAndIncrement()),
                 0L,
                 toSave.getName()
         );

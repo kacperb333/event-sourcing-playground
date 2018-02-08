@@ -1,4 +1,4 @@
-package pl.kacperb333.java.foodbook.food.composition;
+package pl.kacperb333.java.foodbook.food.composition.dishes;
 
 import lombok.Value;
 
