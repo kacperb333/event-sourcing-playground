@@ -10,7 +10,7 @@ import java.util.Optional;
 import static org.apache.commons.lang3.Validate.*;
 
 
-class BasicIngredient implements DomainEntity {
+class BasicIngredient implements DomainEntity<BasicIngredient.Identifier> {
     @Value
     static class Identifier implements UniqueIdentifier {
         private final Long id;

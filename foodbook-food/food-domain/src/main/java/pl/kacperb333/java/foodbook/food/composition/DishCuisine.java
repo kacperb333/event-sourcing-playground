@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static org.apache.commons.lang3.Validate.*;
 
-class DishCuisine implements DomainEntity {
+class DishCuisine implements DomainEntity<DishCuisine.Identifier> {
     @Value
     static class Identifier implements UniqueIdentifier {
         private final Long id;

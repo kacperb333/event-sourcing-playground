@@ -2,7 +2,7 @@ package pl.kacperb333.java.foodbook.food.composition;
 
 import pl.kacperb333.java.foodbook.domain.test.TestReadRepository;
 
-class TestIngredientReadRepository extends TestReadRepository<BasicIngredient>
+class TestIngredientReadRepository extends TestReadRepository<BasicIngredient, BasicIngredient.Identifier>
         implements IngredientReadRepository {
 
     TestIngredientReadRepository() {

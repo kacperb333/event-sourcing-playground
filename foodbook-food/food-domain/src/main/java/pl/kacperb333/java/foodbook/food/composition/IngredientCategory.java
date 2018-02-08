@@ -7,7 +7,7 @@ import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
 
-class IngredientCategory implements DomainEntity {
+class IngredientCategory implements DomainEntity<IngredientCategory.Identifier> {
     @Value
     static class Identifier implements UniqueIdentifier {
         private final Long id;

@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.apache.commons.lang3.Validate.*;
 
-class BasicDish implements DomainEntity {
+class BasicDish implements DomainEntity<BasicDish.Identifier> {
     @Value
     static class Identifier implements UniqueIdentifier {
         final Long id;

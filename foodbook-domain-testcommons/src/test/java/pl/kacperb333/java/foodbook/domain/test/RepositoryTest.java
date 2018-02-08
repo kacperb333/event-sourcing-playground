@@ -84,7 +84,7 @@ public class RepositoryTest {
         writeRepository.save(toWrite);
     }
 
-    private static class SimpleEntity implements DomainEntity {
+    private static class SimpleEntity implements DomainEntity<SimpleEntity.Identifier> {
         static class Identifier implements UniqueIdentifier {
             private final Long id;
 
@@ -151,13 +151,13 @@ public class RepositoryTest {
     }
 
 
-    private static class SimpleEntityReadRepository extends TestReadRepository<SimpleEntity> {
+    private static class SimpleEntityReadRepository extends TestReadRepository<SimpleEntity, SimpleEntity.Identifier> {
 
         SimpleEntityReadRepository() {
             super();
         }
 
-        SimpleEntityReadRepository(Map<? extends UniqueIdentifier, SimpleEntity> initialDatabase) {
+        protected SimpleEntityReadRepository(Map<SimpleEntity.Identifier, SimpleEntity> initialDatabase) {
             super(initialDatabase);
         }
 
@@ -167,7 +167,7 @@ public class RepositoryTest {
         }
     }
 
-    private static class SimpleEntityWriteRepository extends TestWriteRepository<SimpleEntity> {
+    private static class SimpleEntityWriteRepository extends TestWriteRepository<SimpleEntity, SimpleEntity.Identifier> {
 
 
         SimpleEntityWriteRepository(SimpleEntityReadRepository underlyingReadRepository) {
