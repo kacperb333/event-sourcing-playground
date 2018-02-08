@@ -1,5 +1,7 @@
 package pl.kacperb333.java.foodbook.domain.test;
 
+import pl.kacperb333.java.foodbook.domain.commontype.DomainEntity;
+import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 import pl.kacperb333.java.foodbook.domain.repository.DomainReadRepository;
 
 import java.util.Map;
@@ -8,7 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class TestReadRepository<Entity, Identifier> implements DomainReadRepository<Entity, Identifier> {
+public abstract class TestReadRepository<Entity extends DomainEntity, Identifier extends UniqueIdentifier>
+        implements DomainReadRepository<Entity, Identifier> {
+
     protected final AtomicLong sequence = new AtomicLong(0L);
     protected final ConcurrentMap<Identifier, Entity> database;
 

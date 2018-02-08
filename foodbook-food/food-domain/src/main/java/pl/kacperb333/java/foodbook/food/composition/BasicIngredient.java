@@ -1,6 +1,8 @@
 package pl.kacperb333.java.foodbook.food.composition;
 
 import lombok.Value;
+import pl.kacperb333.java.foodbook.domain.commontype.DomainEntity;
+import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 import pl.kacperb333.java.foodbook.domain.commonvalue.Money;
 
 import java.util.Optional;
@@ -8,10 +10,10 @@ import java.util.Optional;
 import static org.apache.commons.lang3.Validate.*;
 
 
-class BasicIngredient {
+class BasicIngredient implements DomainEntity {
     @Value
-    static class Identifier {
-        private final long id;
+    static class Identifier implements UniqueIdentifier {
+        private final Long id;
     }
 
     private final Identifier id;
@@ -28,6 +30,7 @@ class BasicIngredient {
         this.category = category;
     }
 
+    @Override
     public Identifier getId() {
         return id;
     }
