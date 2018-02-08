@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import pl.kacperb333.java.foodbook.domain.commontype.DomainEntity;
 import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,12 +19,23 @@ public class RepositoryTest {
 
     @BeforeMethod
     void before() {
-        readRepository = new SimpleEntityReadRepository();
+        initialize();
+    }
+
+    private void initialize(Long... ids) {
+        Map<SimpleEntity.Identifier, SimpleEntity> initialDatabase = new HashMap<>();
+        for(Long id : ids) {
+            SimpleEntity.Identifier identifier = new SimpleEntity.Identifier(id);
+            SimpleEntity initialization = new SimpleEntity(identifier);
+            initialDatabase.put(initialization.getId(), initialization);
+        }
+
+        readRepository = new SimpleEntityReadRepository(initialDatabase);
         writeRepository = new SimpleEntityWriteRepository(readRepository);
     }
 
     @Test
-    public void addedEntityShouldBeRead() {
+    void addedEntityShouldBeRead() {
         SimpleEntity.Identifier identifier = new SimpleEntity.Identifier(1L);
 
         SimpleEntity toSave = new SimpleEntity(identifier);
@@ -34,7 +46,7 @@ public class RepositoryTest {
     }
 
     @Test
-    public void nonexistentEntityShouldNotBeFound() {
+    void nonexistentEntityShouldNotBeFound() {
         SimpleEntity.Identifier nonexistentIdentifier = new SimpleEntity.Identifier(1L);
 
         Optional<SimpleEntity> notFound = readRepository.find(nonexistentIdentifier);
@@ -43,13 +55,33 @@ public class RepositoryTest {
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
-    public void shouldThrowExceptionWhenAddingDuplicateEntity() {
+    void shouldThrowExceptionWhenAddingDuplicateEntity() {
         SimpleEntity.Identifier identifier = new SimpleEntity.Identifier(1L);
 
         SimpleEntity toInsertTwoTimes = new SimpleEntity(identifier);
 
         writeRepository.save(toInsertTwoTimes);
         writeRepository.save(toInsertTwoTimes);
+    }
+
+    @Test
+    void shouldReadEntityFromInitializedRepository() {
+        initialize(1L);
+
+        SimpleEntity.Identifier identifier = new SimpleEntity.Identifier(1L);
+        Optional<SimpleEntity> toRead = readRepository.find(identifier);
+
+        Assert.assertTrue(toRead.isPresent());
+    }
+
+    @Test(expectedExceptions = IllegalStateException.class)
+    void shouldThrowWhenInsertingEntityAlreadyPresentInInitializedRepository() {
+        initialize(1L);
+
+        SimpleEntity.Identifier identifier = new SimpleEntity.Identifier(1L);
+        SimpleEntity toWrite = new SimpleEntity(identifier);
+
+        writeRepository.save(toWrite);
     }
 
     private static class SimpleEntity implements DomainEntity {
@@ -119,13 +151,13 @@ public class RepositoryTest {
     }
 
 
-    private static class SimpleEntityReadRepository extends TestReadRepository<SimpleEntity, SimpleEntity.Identifier> {
+    private static class SimpleEntityReadRepository extends TestReadRepository<SimpleEntity> {
 
         SimpleEntityReadRepository() {
             super();
         }
 
-        SimpleEntityReadRepository(Map<SimpleEntity.Identifier, SimpleEntity> initialDatabase) {
+        SimpleEntityReadRepository(Map<? extends UniqueIdentifier, SimpleEntity> initialDatabase) {
             super(initialDatabase);
         }
 
@@ -135,7 +167,7 @@ public class RepositoryTest {
         }
     }
 
-    private static class SimpleEntityWriteRepository extends TestWriteRepository<SimpleEntity, SimpleEntity.Identifier> {
+    private static class SimpleEntityWriteRepository extends TestWriteRepository<SimpleEntity> {
 
 
         SimpleEntityWriteRepository(SimpleEntityReadRepository underlyingReadRepository) {

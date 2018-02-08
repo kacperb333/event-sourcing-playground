@@ -2,17 +2,11 @@ package pl.kacperb333.java.foodbook.food.composition;
 
 import pl.kacperb333.java.foodbook.domain.test.TestReadRepository;
 
-import java.util.Map;
-
-class TestDishCuisineReadRepository extends TestReadRepository<DishCuisine, DishCuisine.Identifier>
+class TestDishCuisineReadRepository extends TestReadRepository<DishCuisine>
         implements DishCuisineReadRepository {
 
     TestDishCuisineReadRepository() {
         super();
-    }
-
-    TestDishCuisineReadRepository(Map<DishCuisine.Identifier, DishCuisine> initialDatabase) {
-        super(initialDatabase);
     }
 
     @Override
