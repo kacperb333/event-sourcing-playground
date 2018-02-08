@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.testng.Assert.assertTrue;
 
 public class RepositoryConcurrencyTest {
-    private SimpleEntityReadRepository readRepository;
     private SimpleEntityWriteRepository writeRepository;
 
     @BeforeMethod
@@ -26,12 +25,11 @@ public class RepositoryConcurrencyTest {
             initialDatabase.put(initialization.getId(), initialization);
         }
 
-        readRepository = new SimpleEntityReadRepository(initialDatabase);
         writeRepository = new SimpleEntityWriteRepository(initialDatabase);
     }
 
     @Test
-    void concurrencyTest() {
+    void concurrentInvocationsShouldThrowExceptionInCaseOfaConflict() {
         for (long i = 0; i < 10000; ++i) {
             SimpleEntity toCreate = new SimpleEntity(new SimpleEntity.Identifier(i));
             CyclicBarrier barrier = new CyclicBarrier(2);
