@@ -19,12 +19,6 @@
         </dependency>
 
         <dependency>
-            <groupId>pl.kacperb333.java</groupId>
-            <artifactId>foodbook-domain-testcommons</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.13.1</version>

@@ -1,51 +1,30 @@
 package pl.kacperb333.java.foodbook.food.composition;
 
 import lombok.Value;
-import pl.kacperb333.java.foodbook.domain.commontype.DomainEntity;
-import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 import pl.kacperb333.java.foodbook.domain.commonvalue.Money;
 
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 
-import static org.apache.commons.lang3.Validate.*;
-
-class BasicDish implements DomainEntity<BasicDish.Identifier> {
+@Value
+class BasicDish {
     @Value
-    static class Identifier implements UniqueIdentifier<Long> {
+    static class Identifier {
         final Long id;
     }
 
     private final Identifier id;
+    private final long version;
     private final String name;
     private final Set<BasicIngredient> ingredients;
     private final Set<DishCuisine> cuisines;
     private final Money additionalPrice;
 
-    private BasicDish(Identifier id, String name, Set<BasicIngredient> ingredients, Set<DishCuisine> cuisines,
-                      Money additionalPrice) {
-        this.id = id;
-        this.name = name;
-        this.ingredients = ingredients;
-        this.cuisines = cuisines;
-        this.additionalPrice = additionalPrice;
-    }
-
-    @Override
-    public Identifier getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Set<BasicIngredient> getIngredientsView() {
+    public Set<BasicIngredient> getIngredients() {
         return Collections.unmodifiableSet(ingredients);
     }
 
-    public Set<DishCuisine> getCuisinesView() {
+    public Set<DishCuisine> getCuisines() {
         return Collections.unmodifiableSet(cuisines);
     }
 

@@ -2,7 +2,7 @@ package pl.kacperb333.java.foodbook.food.composition;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import pl.kacperb333.java.foodbook.food.composition.dto.CreateIngredientCategoryIn;
+import pl.kacperb333.java.foodbook.food.composition.dto.CreateIngredientCategoryInput;
 
 import java.util.Optional;
 import java.util.concurrent.*;
@@ -15,7 +15,7 @@ public class IngredientCategoryWriteTest {
     private TestIngredientCategoryReadRepository readRepository;
     private TestIngredientCategoryWriteRepository writeRepository;
 
-    private IngredientCategoryWriteFacade facade;
+    private IngredientCategoryFacade facade;
 
     @BeforeMethod
     void beforeMethod() {
@@ -24,13 +24,13 @@ public class IngredientCategoryWriteTest {
         readRepository = new TestIngredientCategoryReadRepository(database);
         writeRepository = new TestIngredientCategoryWriteRepository(database);
 
-        facade = new IngredientCategoryWriteFacade(writeRepository, readRepository);
+        facade = new IngredientCategoryFacade(writeRepository, readRepository);
     }
 
     @Test
     void savedCategoryShouldBeObtainable() {
         String newCategoryName = "New Category";
-        CreateIngredientCategoryIn createInput = CreateIngredientCategoryIn.tryCreate(newCategoryName);
+        CreateIngredientCategoryInput createInput = new CreateIngredientCategoryInput(newCategoryName);
 
         IngredientCategory.Identifier createdId = facade.createIngredientCategory(createInput);
 

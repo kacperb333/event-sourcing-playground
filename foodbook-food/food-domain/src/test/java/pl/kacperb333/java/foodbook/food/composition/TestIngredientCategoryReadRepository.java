@@ -1,15 +1,23 @@
 package pl.kacperb333.java.foodbook.food.composition;
 
-import pl.kacperb333.java.foodbook.domain.test.TestReadRepository;
-
+import java.util.Optional;
 import java.util.concurrent.ConcurrentMap;
 
-class TestIngredientCategoryReadRepository extends TestReadRepository<IngredientCategory, IngredientCategory.Identifier>
-        implements IngredientCategoryReadRepository {
+class TestIngredientCategoryReadRepository implements IngredientCategoryReadRepository {
 
+    private final ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database;
 
-    protected TestIngredientCategoryReadRepository(ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database) {
-        super(database);
+    TestIngredientCategoryReadRepository(ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database) {
+        this.database = database;
     }
 
+    @Override
+    public Optional<IngredientCategory> find(IngredientCategory.Identifier id) {
+        return Optional.ofNullable(database.get(id));
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return database.values().stream().anyMatch(v -> name.equals(v.getName()));
+    }
 }

@@ -1,6 +1,9 @@
 package pl.kacperb333.java.foodbook.food.composition;
 
-import pl.kacperb333.java.foodbook.domain.repository.DomainReadRepository;
+import java.util.Optional;
 
-interface IngredientCategoryReadRepository extends DomainReadRepository<IngredientCategory, IngredientCategory.Identifier> {
+interface IngredientCategoryReadRepository {
+    Optional<IngredientCategory> find(IngredientCategory.Identifier id);
+
+    boolean existsByName(String name);
 }

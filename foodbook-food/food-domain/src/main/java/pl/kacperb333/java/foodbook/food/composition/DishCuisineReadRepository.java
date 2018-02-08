@@ -1,7 +1,5 @@
 package pl.kacperb333.java.foodbook.food.composition;
 
-import pl.kacperb333.java.foodbook.domain.repository.DomainReadRepository;
-
-interface DishCuisineReadRepository extends DomainReadRepository<DishCuisine, DishCuisine.Identifier> {
+interface DishCuisineReadRepository {
     boolean existsByName(String name);
 }
