@@ -66,26 +66,4 @@ class BasicDish implements DomainEntity<BasicDish.Identifier> {
 
         return ingredientPrice.plus(additionalPrice);
     }
-
-    static class Provider {
-        private final DishReadRepository repository;
-
-        public Provider(DishReadRepository repository) {
-            this.repository = repository;
-        }
-
-        public BasicDish createFrom(String name, Set<BasicIngredient> ingredients, Set<DishCuisine> cuisines,
-                                    Money additionalPrice) {
-            notEmpty(name);
-            notEmpty(ingredients);
-            notNull(additionalPrice);
-            notEmpty(cuisines);
-            isTrue(!repository.existsByName(name), "Dish %s already exists", name);
-            return new BasicDish(repository.provideNewIdentifier(), name, ingredients, cuisines, additionalPrice);
-        }
-
-        public Optional<BasicDish> find(Identifier id) {
-            return repository.find(id);
-        }
-    }
 }

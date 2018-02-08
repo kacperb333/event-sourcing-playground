@@ -50,26 +50,4 @@ class BasicIngredient implements DomainEntity<BasicIngredient.Identifier> {
     public IngredientCategory getCategory() {
         return category;
     }
-
-    static class Provider {
-
-        private final IngredientReadRepository repository;
-
-        public Provider(IngredientReadRepository repository) {
-            this.repository = repository;
-        }
-
-        public BasicIngredient createFrom(String name, EnergyValue energyValue, Money price, IngredientCategory category) {
-            notEmpty(name);
-            notNull(energyValue);
-            notNull(category);
-            isTrue(!repository.existsByName(name), "Ingredient %s already exists", name);
-            return new BasicIngredient(repository.provideNewIdentifier(), name, energyValue, price, category);
-        }
-
-        public Optional<BasicIngredient> find(Identifier id) {
-            notNull(id);
-            return repository.find(id);
-        }
-    }
 }

@@ -2,10 +2,13 @@ package pl.kacperb333.java.foodbook.food.composition;
 
 import pl.kacperb333.java.foodbook.domain.test.TestReadRepository;
 
+import java.util.concurrent.ConcurrentMap;
+
 class TestDishReadRepository extends TestReadRepository<BasicDish, BasicDish.Identifier> implements DishReadRepository {
 
-    TestDishReadRepository() {
-        super();
+
+    protected TestDishReadRepository(ConcurrentMap<BasicDish.Identifier, BasicDish> database) {
+        super(database);
     }
 
     @Override
@@ -13,8 +16,4 @@ class TestDishReadRepository extends TestReadRepository<BasicDish, BasicDish.Ide
         return database.values().stream().anyMatch(d-> name.equals(d.getName()));
     }
 
-    @Override
-    public BasicDish.Identifier provideNewIdentifier() {
-        return new BasicDish.Identifier(sequence.getAndIncrement());
-    }
 }

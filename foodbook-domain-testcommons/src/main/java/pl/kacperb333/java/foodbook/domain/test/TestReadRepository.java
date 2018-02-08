@@ -13,15 +13,15 @@ import java.util.concurrent.atomic.AtomicLong;
 public abstract class TestReadRepository<Entity extends DomainEntity<Identifier>, Identifier extends UniqueIdentifier<?>>
         implements DomainReadRepository<Entity, Identifier> {
 
-    protected final AtomicLong sequence = new AtomicLong(0L);
     protected final ConcurrentMap<Identifier, Entity> database;
 
-    protected TestReadRepository() {
-        this.database = new ConcurrentHashMap<>();
+    protected TestReadRepository(ConcurrentMap<Identifier, Entity> database) {
+        this.database = database;
     }
 
-    protected TestReadRepository(Map<Identifier, Entity> initialDatabase) {
-        this.database = new ConcurrentHashMap<>(initialDatabase);
+    @Override
+    public boolean exists(Identifier id) {
+        return find(id).isPresent();
     }
 
     @Override

@@ -2,11 +2,13 @@ package pl.kacperb333.java.foodbook.food.composition;
 
 import pl.kacperb333.java.foodbook.domain.test.TestWriteRepository;
 
+import java.util.concurrent.ConcurrentMap;
+
 class TestIngredientCategoryWriteRepository extends TestWriteRepository<IngredientCategory, IngredientCategory.Identifier>
         implements IngredientCategoryWriteRepository {
 
 
-    protected TestIngredientCategoryWriteRepository(TestIngredientCategoryReadRepository underlyingReadRepository) {
-        super(underlyingReadRepository);
+    public TestIngredientCategoryWriteRepository(ConcurrentMap<IngredientCategory.Identifier, IngredientCategory> database) {
+        super(database);
     }
 }

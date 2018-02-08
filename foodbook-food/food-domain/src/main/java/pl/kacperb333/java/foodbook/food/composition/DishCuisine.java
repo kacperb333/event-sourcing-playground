@@ -30,23 +30,4 @@ class DishCuisine implements DomainEntity<DishCuisine.Identifier> {
     public String getName() {
         return name;
     }
-
-    static class Provider {
-        private final DishCuisineReadRepository repositotry;
-
-        public Provider(DishCuisineReadRepository repositotry) {
-            this.repositotry = repositotry;
-        }
-
-        Optional<DishCuisine> find(Identifier id) {
-            notNull(id);
-            return repositotry.find(id);
-        }
-
-        DishCuisine createFrom(String name) {
-            notEmpty(name);
-            isTrue(!repositotry.existsByName(name), "Cuisine %s already exists", name);
-            return new DishCuisine(repositotry.provideNewIdentifier(), name);
-        }
-    }
 }

@@ -6,6 +6,6 @@ import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 import java.util.Optional;
 
 public interface DomainReadRepository<Entity extends DomainEntity<Identifier>, Identifier extends UniqueIdentifier<?>> {
-    Identifier provideNewIdentifier();
+    boolean exists(Identifier id);
     Optional<Entity> find(Identifier id);
 }
