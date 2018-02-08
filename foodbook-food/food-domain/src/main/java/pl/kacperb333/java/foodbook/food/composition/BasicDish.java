@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.Validate.*;
 
 class BasicDish implements DomainEntity<BasicDish.Identifier> {
     @Value
-    static class Identifier implements UniqueIdentifier {
+    static class Identifier implements UniqueIdentifier<Long> {
         final Long id;
     }
 

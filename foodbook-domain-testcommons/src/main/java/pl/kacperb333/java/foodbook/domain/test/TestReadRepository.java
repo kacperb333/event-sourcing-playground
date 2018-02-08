@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class TestReadRepository<Entity extends DomainEntity<Identifier>, Identifier extends UniqueIdentifier>
+public abstract class TestReadRepository<Entity extends DomainEntity<Identifier>, Identifier extends UniqueIdentifier<?>>
         implements DomainReadRepository<Entity, Identifier> {
 
     protected final AtomicLong sequence = new AtomicLong(0L);

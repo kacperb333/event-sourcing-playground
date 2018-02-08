@@ -9,7 +9,7 @@ import static org.apache.commons.lang3.Validate.notEmpty;
 
 class IngredientCategory implements DomainEntity<IngredientCategory.Identifier> {
     @Value
-    static class Identifier implements UniqueIdentifier {
+    static class Identifier implements UniqueIdentifier<Long> {
         private final Long id;
     }
 

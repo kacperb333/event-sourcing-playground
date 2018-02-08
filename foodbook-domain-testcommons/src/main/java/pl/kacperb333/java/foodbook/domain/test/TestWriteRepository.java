@@ -4,7 +4,7 @@ import pl.kacperb333.java.foodbook.domain.commontype.DomainEntity;
 import pl.kacperb333.java.foodbook.domain.commontype.UniqueIdentifier;
 import pl.kacperb333.java.foodbook.domain.repository.DomainWriteRepository;
 
-public abstract class TestWriteRepository<Entity extends DomainEntity<Identifier>, Identifier extends UniqueIdentifier>
+public abstract class TestWriteRepository<Entity extends DomainEntity<Identifier>, Identifier extends UniqueIdentifier<?>>
         implements DomainWriteRepository<Entity> {
 
     private final TestReadRepository<Entity, Identifier> underlyingReadRepository;

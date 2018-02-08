@@ -85,7 +85,7 @@ public class RepositoryTest {
     }
 
     private static class SimpleEntity implements DomainEntity<SimpleEntity.Identifier> {
-        static class Identifier implements UniqueIdentifier {
+        static class Identifier implements UniqueIdentifier<Long> {
             private final Long id;
 
             public Identifier(Long id) {
