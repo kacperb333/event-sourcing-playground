@@ -10,7 +10,6 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>foodbook-food</module>
-        <module>foodbook-domain-commons</module>
     </modules>
 
     <properties>
