@@ -49,4 +49,8 @@ class IngredientCompartment {
     public int getSupply() {
         return supply;
     }
+
+    public boolean isEmpty() {
+        return supply == 0;
+    }
 }

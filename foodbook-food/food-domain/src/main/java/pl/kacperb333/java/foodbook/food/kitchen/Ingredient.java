@@ -14,7 +14,7 @@ class Ingredient {
         this.energyValue = energyValue;
     }
 
-    public Ingredient ofNameAndEnergyValue(String name, EnergyValue energyValue) {
+    public static Ingredient ofNameAndEnergyValue(String name, EnergyValue energyValue) {
         notEmpty(name, "Ingredient must have a name");
         notNull(energyValue, "Ingredient must have energy value");
         return new Ingredient(name, energyValue);

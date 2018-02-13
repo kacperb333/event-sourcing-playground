@@ -35,8 +35,10 @@ class Shelf {
     }
 
     public void removeCompartment(Ingredient ingredient) {
-        if (!ingredientCompartments.containsKey(ingredient)) {
-            throwCompartmentNotPresent(ingredient);
+        IngredientCompartment compartmentToRemove = getCompartmentForIngredient(ingredient);
+        if (!compartmentToRemove.isEmpty()) {
+            throw new IllegalArgumentException(
+                    String.format("Not empty compartment cannot be removed: %s", compartmentToRemove));
         }
 
         ingredientCompartments.remove(ingredient);
@@ -63,5 +65,17 @@ class Shelf {
     private void throwCompartmentNotPresent(Ingredient ingredient) {
         throw new IllegalArgumentException(
                 String.format("Compartment for ingredient %s not present on the shelf", ingredient));
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean containsCompartmentFor(Ingredient ingredient) {
+        return ingredientCompartments.containsKey(ingredient);
+    }
+
+    public boolean isEmpty() {
+        return ingredientCompartments.isEmpty();
     }
 }
