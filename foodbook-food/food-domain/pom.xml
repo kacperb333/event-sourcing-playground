@@ -14,8 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>pl.kacperb333.java</groupId>
-            <artifactId>foodbook-domain-commons</artifactId>
-            <version>${project.version}</version>
+            <artifactId>event-sourcing</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
