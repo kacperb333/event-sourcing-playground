@@ -14,8 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>pl.kacperb333.java</groupId>
-            <artifactId>event-sourcing</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>event-sourcing-commons</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

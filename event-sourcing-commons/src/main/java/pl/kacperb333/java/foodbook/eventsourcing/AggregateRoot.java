@@ -5,10 +5,17 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AggregateRoot {
-    private final List<Event> uncommittedEvents = new LinkedList<>();
+public abstract class AggregateRoot<T extends Identifier> {
+    private final T identifier;
+    private final List<Event<?>> uncommittedEvents = new LinkedList<>();
 
-    protected abstract Identifier getIdentifier();
+    protected AggregateRoot(T identifier) {
+        this.identifier = identifier;
+    }
+
+    public T getIdentifier() {
+        return identifier;
+    }
 
     protected void applyEvent(Event event) {
         applyChange(event);
@@ -20,12 +27,18 @@ public abstract class AggregateRoot {
         uncommittedEvents.clear();
     }
 
-    void applyHistory(Identifier aggregateRootIdentifier, EventStore eventStore) {
-        eventStore.getCommittedEvents(aggregateRootIdentifier).forEach(this::applyChange);
+    void applyHistory(EventStore eventStore) {
+        Identifier aggregateRootIdentifier = getIdentifier();
+        List<Event<?>> existingAggregateEvents = eventStore.getCommittedEvents(aggregateRootIdentifier);
+        if (existingAggregateEvents.isEmpty()) {
+            throw new IllegalArgumentException(
+                    String.format("Aggregate (%s) identifier by (%s) does not exist", this, aggregateRootIdentifier));
+        }
+        existingAggregateEvents.forEach(this::applyChange);
     }
 
 
-    private void applyChange(Event event) {
+    private void applyChange(Event<?> event) {
         Class<?> eventType = event.getClass();
         try {
             Method method = this.getClass().getDeclaredMethod("apply", eventType);

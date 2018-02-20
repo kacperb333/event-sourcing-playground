@@ -14,7 +14,7 @@ public abstract class EventStoreRepository<T extends AggregateRoot> implements R
 
     @Override
     public T load(T aggregateRoot) {
-        aggregateRoot.applyHistory(aggregateRoot.getIdentifier(), underlyingEventStore);
+        aggregateRoot.applyHistory(underlyingEventStore);
         return aggregateRoot;
     }
 }
