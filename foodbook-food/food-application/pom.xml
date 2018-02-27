@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>pl.kacperb333.java</groupId>
-            <artifactId>event-sourcing-local-spring</artifactId>
+            <artifactId>event-sourcing</artifactId>
             <version>${project.version}</version>
         </dependency>
 

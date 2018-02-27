@@ -21,7 +21,7 @@ class FoodInventoryConfiguration {
 
     @Bean
     EventStore eventStore(ApplicationEventPublisher eventPublisher) {
-        return new InMemorySimpleEventStore(eventPublisher);
+        return new InMemorySimpleEventStore(new SpringEventPublisher(eventPublisher));
     }
 
     @Bean

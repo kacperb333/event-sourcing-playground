@@ -10,8 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>foodbook-food</module>
-        <module>event-sourcing-api</module>
-        <module>event-sourcing-local-spring</module>
+        <module>event-sourcing</module>
     </modules>
 
     <properties>

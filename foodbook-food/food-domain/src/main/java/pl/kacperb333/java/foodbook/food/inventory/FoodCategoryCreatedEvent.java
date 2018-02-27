@@ -3,7 +3,7 @@ package pl.kacperb333.java.foodbook.food.inventory;
 import pl.kacperb333.java.foodbook.eventsourcing.Event;
 import pl.kacperb333.java.foodbook.food.inventory.value.FoodCategoryIdentifier;
 
-class FoodCategoryCreatedEvent extends Event<FoodCategoryIdentifier> {
+class FoodCategoryCreatedEvent extends Event {
 
     private final String categoryName;
 

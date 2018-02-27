@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>event-sourcing-api</artifactId>
+    <artifactId>event-sourcing</artifactId>
 
 
 </project>

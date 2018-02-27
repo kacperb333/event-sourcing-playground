@@ -4,7 +4,7 @@ public class FoodCategoryWithNameAlreadyExistsException extends Exception {
     private final String existingName;
 
     public FoodCategoryWithNameAlreadyExistsException(String existingName) {
-        super(String.format("Category with name '%s' already exists: (%s)", existingName));
+        super(String.format("Category with name '%s' already exists", existingName));
         this.existingName = existingName;
     }
 
