@@ -16,8 +16,14 @@
         <dependency>
             <groupId>pl.kacperb333.java</groupId>
             <artifactId>food-domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>pl.kacperb333.java</groupId>
+            <artifactId>event-sourcing-local-spring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

@@ -1,20 +1,17 @@
-package pl.kacperb333.java.foodbook.food.inventory;
+package pl.kacperb333.java.foodbook.eventsourcing;
 
 import org.springframework.context.ApplicationEventPublisher;
-import pl.kacperb333.java.foodbook.eventsourcing.Event;
-import pl.kacperb333.java.foodbook.eventsourcing.EventStore;
-import pl.kacperb333.java.foodbook.eventsourcing.Identifier;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class InMemorySimpleEventStore implements EventStore {
+public class InMemorySimpleEventStore implements EventStore {
 
     private List<Event<?>> events = new LinkedList<>();
     private final ApplicationEventPublisher eventPublisher;
 
-    InMemorySimpleEventStore(ApplicationEventPublisher eventPublisher) {
+    public InMemorySimpleEventStore(ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 
@@ -34,5 +31,4 @@ class InMemorySimpleEventStore implements EventStore {
         events.add(event);
         eventPublisher.publishEvent(event);
     }
-
 }

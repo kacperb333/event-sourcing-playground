@@ -4,6 +4,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kacperb333.java.foodbook.eventsourcing.EventStore;
+import pl.kacperb333.java.foodbook.eventsourcing.InMemorySimpleEventStore;
 
 @Configuration
 class FoodInventoryConfiguration {
