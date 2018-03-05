@@ -1,6 +1,8 @@
 package pl.kacperb333.java.foodbook.eventsourcing;
 
-public interface Repository<T extends AggregateRoot> {
-    void save(T toSave, long expectedVersion);
-    T load(T aggregateRoot, long expectedVersion);
+public interface Repository<AggregateType extends AggregateRoot<IdentifierType>, IdentifierType> {
+    void save(AggregateType toSave, long expectedVersion);
+
+    AggregateType load(IdentifierType aggregateIdentifier);
+    AggregateType loadExact(IdentifierType aggregateIdentifier, long expectedVersion);
 }

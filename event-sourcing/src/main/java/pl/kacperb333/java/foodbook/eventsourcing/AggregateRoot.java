@@ -5,41 +5,35 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class AggregateRoot<T extends Identifier> {
-    private final T identifier;
+public abstract class AggregateRoot<IdentifierType> {
+    private final IdentifierType aggregateIdentifier;
     private final List<Event> uncommittedEvents = new LinkedList<>();
     private long version = 0;
 
-    protected AggregateRoot(T identifier) {
-        this.identifier = identifier;
-    }
-
-    public T getIdentifier() {
-        return identifier;
+    protected AggregateRoot(IdentifierType aggregateIdentifier) {
+        this.aggregateIdentifier = aggregateIdentifier;
     }
 
     protected void applyEvent(Event event) {
-        event.setVersion(++version);
         applyChange(event);
         uncommittedEvents.add(event);
     }
 
-    void commitEvents(EventStore eventStore, long expectedVersion) {
-        eventStore.commit(identifier, uncommittedEvents, expectedVersion);
+    void commitEvents(EventStore<IdentifierType> eventStore, long expectedVersion) {
+        eventStore.commit(aggregateIdentifier, uncommittedEvents, expectedVersion);
         uncommittedEvents.clear();
     }
 
-    void applyHistory(EventStore eventStore) {
-        Identifier aggregateRootIdentifier = getIdentifier();
-        List<Event> existingAggregateEvents = eventStore.getCommittedEvents(aggregateRootIdentifier);
+    void applyHistory(EventStore<IdentifierType> eventStore) {
+        List<Event> existingAggregateEvents = eventStore.getCommittedEvents(aggregateIdentifier);
         if (existingAggregateEvents.isEmpty()) {
             throw new IllegalArgumentException(
-                    String.format("Aggregate (%s) identifier by (%s) does not exist", this, aggregateRootIdentifier));
+                    String.format("Aggregate (%s) identifier by (%s) does not exist", this, aggregateIdentifier));
         }
         existingAggregateEvents.forEach(this::applyChange);
     }
 
-    public long getVersion() {
+    long getVersion() {
         return version;
     }
 
