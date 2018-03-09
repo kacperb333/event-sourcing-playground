@@ -5,9 +5,9 @@ class AggregateProcessStartedEvent extends Event<SimpleAggregateIdentifier> {
     private final String name;
     private final int initialBalance;
 
-    protected AggregateProcessStartedEvent(SimpleAggregateIdentifier aggregateIdentifier, long version,
+    protected AggregateProcessStartedEvent(SimpleAggregateIdentifier aggregateIdentifier,
                                            String name, int initialBalance) {
-        super(aggregateIdentifier, version);
+        super(aggregateIdentifier);
         this.name = name;
         this.initialBalance = initialBalance;
     }
