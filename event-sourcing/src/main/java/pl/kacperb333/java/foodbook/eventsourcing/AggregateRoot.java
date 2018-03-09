@@ -7,14 +7,22 @@ import java.util.List;
 
 public abstract class AggregateRoot<IdentifierType> {
     private final IdentifierType aggregateIdentifier;
-    private final List<Event> uncommittedEvents = new LinkedList<>();
+    private final List<Event<IdentifierType>> uncommittedEvents = new LinkedList<>();
     private long version = 0;
 
     protected AggregateRoot(IdentifierType aggregateIdentifier) {
         this.aggregateIdentifier = aggregateIdentifier;
     }
 
-    protected void applyEvent(Event event) {
+    public IdentifierType getAggregateIdentifier() {
+        return aggregateIdentifier;
+    }
+
+    long getVersion() {
+        return version;
+    }
+
+    protected void applyEvent(Event<IdentifierType> event) {
         applyChange(event);
         uncommittedEvents.add(event);
     }
@@ -25,16 +33,12 @@ public abstract class AggregateRoot<IdentifierType> {
     }
 
     void applyHistory(EventStore<IdentifierType> eventStore) {
-        List<Event> existingAggregateEvents = eventStore.getCommittedEvents(aggregateIdentifier);
+        List<Event<IdentifierType>> existingAggregateEvents = eventStore.getCommittedEvents(aggregateIdentifier);
         if (existingAggregateEvents.isEmpty()) {
             throw new IllegalArgumentException(
                     String.format("Aggregate (%s) identifier by (%s) does not exist", this, aggregateIdentifier));
         }
         existingAggregateEvents.forEach(this::applyChange);
-    }
-
-    long getVersion() {
-        return version;
     }
 
     private void applyChange(Event event) {

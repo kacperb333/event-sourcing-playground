@@ -4,5 +4,5 @@ public interface Repository<AggregateType extends AggregateRoot<IdentifierType>,
     void save(AggregateType toSave, long expectedVersion);
 
     AggregateType load(IdentifierType aggregateIdentifier);
-    AggregateType loadExact(IdentifierType aggregateIdentifier, long expectedVersion);
+    AggregateType loadExact(IdentifierType aggregateIdentifier, long expectedVersion) throws NoExactResultException;
 }
