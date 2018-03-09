@@ -6,17 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AggregateRoot<IdentifierType> {
-    private final IdentifierType aggregateIdentifier;
     private final List<Event<IdentifierType>> uncommittedEvents = new LinkedList<>();
     private long version = 0;
 
-    protected AggregateRoot(IdentifierType aggregateIdentifier) {
-        this.aggregateIdentifier = aggregateIdentifier;
-    }
-
-    public IdentifierType getAggregateIdentifier() {
-        return aggregateIdentifier;
-    }
+    public abstract IdentifierType getAggregateIdentifier();
 
     long getVersion() {
         return version;
@@ -28,15 +21,15 @@ public abstract class AggregateRoot<IdentifierType> {
     }
 
     void commitEvents(EventStore<IdentifierType> eventStore, long expectedVersion) {
-        eventStore.commit(aggregateIdentifier, uncommittedEvents, expectedVersion);
+        eventStore.commit(getAggregateIdentifier(), uncommittedEvents, expectedVersion);
         uncommittedEvents.clear();
     }
 
     void applyHistory(EventStore<IdentifierType> eventStore) {
-        List<Event<IdentifierType>> existingAggregateEvents = eventStore.getCommittedEvents(aggregateIdentifier);
+        List<Event<IdentifierType>> existingAggregateEvents = eventStore.getCommittedEvents(getAggregateIdentifier());
         if (existingAggregateEvents.isEmpty()) {
             throw new IllegalArgumentException(
-                    String.format("Aggregate (%s) identifier by (%s) does not exist", this, aggregateIdentifier));
+                    String.format("Aggregate (%s) identifier by (%s) does not exist", this, getAggregateIdentifier()));
         }
         existingAggregateEvents.forEach(this::applyChange);
     }
@@ -47,7 +40,7 @@ public abstract class AggregateRoot<IdentifierType> {
             Method method = this.getClass().getDeclaredMethod("apply", eventType);
             method.setAccessible(true);
             method.invoke(this, event);
-            version = event.getVersion();
+            version = event.getVersion() + 1;
         } catch (SecurityException | IllegalAccessException | InvocationTargetException ex) {
             throw new RuntimeException(ex);
         } catch (NoSuchMethodException ex) {

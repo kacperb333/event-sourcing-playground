@@ -9,6 +9,10 @@ public abstract class Event<IdentifierType> {
         this.version = version;
     }
 
+    public Event(IdentifierType aggregateIdentifier) {
+        this(aggregateIdentifier, 0L);
+    }
+
     IdentifierType getAggregateIdentifier() {
         return aggregateIdentifier;
     }
