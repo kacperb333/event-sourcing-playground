@@ -1,5 +1,6 @@
 package pl.kacperb333.java.foodbook.eventsourcing;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierType>, IdentifierType>
@@ -22,8 +23,11 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
     @Override
     public AggregateType load(IdentifierType aggregateIdentifier) {
         try {
-            AggregateType aggregate = reifiedAggregateType.getConstructor(aggregateIdentifier.getClass())
-                    .newInstance(aggregateIdentifier);
+            Constructor<AggregateType> aggregateConstructor =
+                    reifiedAggregateType.getDeclaredConstructor(aggregateIdentifier.getClass());
+            aggregateConstructor.setAccessible(true);
+
+            AggregateType aggregate = aggregateConstructor.newInstance(aggregateIdentifier);
             aggregate.applyHistory(underlyingEventStore);
             return aggregate;
         } catch (NoSuchMethodException | IllegalAccessException |
