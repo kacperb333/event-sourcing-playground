@@ -38,7 +38,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
     }
 
     void rename(String newName) {
-        applyEvent(new AggregateRenamedEvent(getAggregateIdentifier(), getVersion(), newName));
+        applyEvent(new AggregateRenamedEvent(getAggregateIdentifier(), getNextVersion(), newName));
     }
 
     private void apply(AggregateRenamedEvent renamedEvent) {
@@ -46,7 +46,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
     }
 
     void credit(int creditAmount) {
-        applyEvent(new AggregateCreditedEvent(getAggregateIdentifier(), getVersion(), creditAmount));
+        applyEvent(new AggregateCreditedEvent(getAggregateIdentifier(), getNextVersion(), creditAmount));
     }
 
     private void apply(AggregateCreditedEvent creditedEvent) {
@@ -54,7 +54,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
     }
 
     void debit(int debitAmount) {
-        applyEvent(new AggregateDebitedEvent(getAggregateIdentifier(), getVersion(), debitAmount));
+        applyEvent(new AggregateDebitedEvent(getAggregateIdentifier(), getNextVersion(), debitAmount));
     }
 
     private void apply(AggregateDebitedEvent debitedEvent) {
@@ -62,7 +62,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
     }
 
     void disable() {
-        applyEvent(new AggregateDisabledEvent(getAggregateIdentifier(), getVersion()));
+        applyEvent(new AggregateDisabledEvent(getAggregateIdentifier(), getNextVersion()));
     }
 
     void apply(AggregateDisabledEvent disabledEvent) {
@@ -70,11 +70,27 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
     }
 
     void activate() {
-        applyEvent(new AggregateActivatedEvent(getAggregateIdentifier(), getVersion()));
+        applyEvent(new AggregateActivatedEvent(getAggregateIdentifier(), getNextVersion()));
     }
 
     void apply(AggregateActivatedEvent activatedEvent) {
         this.state = State.ACTIVE;
+    }
+
+    SimpleAggregateIdentifier getIdentifier() {
+        return identifier;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    int getBalance() {
+        return balance;
+    }
+
+    State getState() {
+        return state;
     }
 
     @Override

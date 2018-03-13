@@ -1,8 +1,11 @@
 package pl.kacperb333.java.foodbook.eventsourcing;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.ConcurrentModificationException;
+
+import static org.testng.Assert.assertEquals;
 
 public class SimpleAggregateRootTest {
 
@@ -16,20 +19,96 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void smokeTest() {
+    void loadedAggregateShouldHaveCorrectStateAfterSaving() {
         SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = SimpleAggregateRoot.startProcess(identifier, "name", 50);
-        aggregate.rename("some new name");
-        aggregate.debit(20);
-        aggregate.credit(100);
-        aggregate.disable();
-        simpleAggregateRepository.save(aggregate, 0);
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
 
+        simpleAggregateRepository.save(aggregate);
         SimpleAggregateRoot loadedAggregate = simpleAggregateRepository.load(identifier);
 
-        Assert.assertEquals(aggregate, loadedAggregate);
-        Assert.assertEquals(eventStore.getCommittedEvents(identifier).size(), 5);
-        Assert.assertEquals(aggregate.getVersion(), loadedAggregate.getVersion());
-        Assert.assertEquals(aggregate.getVersion(), 5);
+        assertAggregate(identifier, loadedAggregate);
+    }
+
+    @Test
+    void shouldLoadAggregateWithExactExpectedVersion() throws NoExactResultException {
+        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+
+        simpleAggregateRepository.save(aggregate);
+        SimpleAggregateRoot loaded = simpleAggregateRepository.loadExact(identifier, 4L);
+        assertAggregate(identifier, loaded);
+    }
+
+    @Test(expectedExceptions = NoExactResultException.class)
+    void shouldThrowExceptionWhenLoadingWithTooLittleExactVersion() throws NoExactResultException {
+        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+
+        simpleAggregateRepository.save(aggregate);
+        simpleAggregateRepository.loadExact(identifier, 3L);
+    }
+
+    @Test(expectedExceptions = NoExactResultException.class)
+    void shouldThrowExceptionWhenLoadingWithTooGreatExactVersion() throws NoExactResultException {
+        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+
+        simpleAggregateRepository.save(aggregate);
+        simpleAggregateRepository.loadExact(identifier, 5L);
+    }
+
+    @Test
+    void shouldLoadAggregateWithExactLeastExpectedVersion() throws NoExpectedResultException {
+        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+
+        simpleAggregateRepository.save(aggregate);
+        SimpleAggregateRoot loaded = simpleAggregateRepository.loadAtLeast(identifier, 4L);
+        assertAggregate(identifier, loaded);
+    }
+
+    @Test
+    void shouldLoadAggregateWithLeastExpectedVersionLessThanActual() throws NoExpectedResultException {
+        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+
+        simpleAggregateRepository.save(aggregate);
+        SimpleAggregateRoot loaded = simpleAggregateRepository.loadAtLeast(identifier, 3L);
+        assertAggregate(identifier, loaded);
+    }
+
+    @Test(expectedExceptions = NoExpectedResultException.class)
+    void shouldThrowExceptionWhenLoadingWithLeastExpectedVersionGreaterThanActual() throws NoExpectedResultException {
+        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
+        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+
+        simpleAggregateRepository.save(aggregate);
+        simpleAggregateRepository.loadAtLeast(identifier, 5L);
+    }
+
+    private static final String INITIAL_NAME = "name";
+    private static final String CHANGED_NAME = "some new name";
+    private static final int INITIAL_BALANCE = 50;
+    private static final int DEBIT_AMOUNT = 20;
+    private static final int CREDIT_AMOUNT = 100;
+
+    private static final long EXPECTED_VERSION = 4L;
+
+    private SimpleAggregateRoot provideAggregate(SimpleAggregateIdentifier identifier) {
+        SimpleAggregateRoot aggregate = SimpleAggregateRoot.startProcess(identifier, INITIAL_NAME, INITIAL_BALANCE);
+        aggregate.rename(CHANGED_NAME);
+        aggregate.debit(DEBIT_AMOUNT);
+        aggregate.credit(CREDIT_AMOUNT);
+        aggregate.disable();
+        return aggregate;
+    }
+
+    private void assertAggregate(SimpleAggregateIdentifier identifier, SimpleAggregateRoot aggregate) {
+        assertEquals(eventStore.getCommittedEvents(identifier).size(), EXPECTED_VERSION + 1);
+        assertEquals(aggregate.getIdentifier(), identifier);
+        assertEquals(aggregate.getVersion(), EXPECTED_VERSION);
+        assertEquals(aggregate.getBalance(), INITIAL_BALANCE - DEBIT_AMOUNT + CREDIT_AMOUNT);
+        assertEquals(aggregate.getName(), CHANGED_NAME);
+        assertEquals(aggregate.getState(), SimpleAggregateRoot.State.DISABLED);
     }
 }

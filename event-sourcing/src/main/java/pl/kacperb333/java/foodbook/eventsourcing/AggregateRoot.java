@@ -15,6 +15,10 @@ public abstract class AggregateRoot<IdentifierType> {
         return version;
     }
 
+    long getNextVersion() {
+        return version + 1;
+    }
+
     protected void applyEvent(Event<IdentifierType> event) {
         applyChange(event);
         uncommittedEvents.add(event);
@@ -40,7 +44,7 @@ public abstract class AggregateRoot<IdentifierType> {
             Method method = this.getClass().getDeclaredMethod("apply", eventType);
             method.setAccessible(true);
             method.invoke(this, event);
-            version = event.getVersion() + 1;
+            version = event.getVersion();
         } catch (SecurityException | IllegalAccessException | InvocationTargetException ex) {
             throw new RuntimeException(ex);
         } catch (NoSuchMethodException ex) {
