@@ -47,4 +47,16 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
 
         return loadedAggregate;
     }
+
+    @Override
+    public AggregateType loadAtLeast(IdentifierType aggregateIdentifier, long leastExpectedVersion)
+            throws NoExpectedResultException {
+
+        AggregateType loadedAggregate = load(aggregateIdentifier);
+        if (loadedAggregate.getVersion() < leastExpectedVersion) {
+            throw new NoExpectedResultException(leastExpectedVersion, loadedAggregate.getVersion());
+        }
+
+        return loadedAggregate;
+    }
 }

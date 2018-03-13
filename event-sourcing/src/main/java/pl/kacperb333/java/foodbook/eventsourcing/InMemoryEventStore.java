@@ -16,7 +16,9 @@ public class InMemoryEventStore<IdentifierType> implements EventStore<Identifier
     }
 
     @Override
-    public void commit(IdentifierType aggregateIdentifier, List<? extends Event<IdentifierType>> eventsToCommit, long expectedVersion) {
+    public void commit(IdentifierType aggregateIdentifier,
+                       List<? extends Event<IdentifierType>> eventsToCommit,
+                       long expectedVersion) {
         List<Event<IdentifierType>> currentEvents = events.getOrDefault(aggregateIdentifier, new LinkedList<>());
         events.putIfAbsent(aggregateIdentifier, currentEvents);
 
