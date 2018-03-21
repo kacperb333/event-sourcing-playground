@@ -4,6 +4,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierType>, IdentifierType>
         implements Repository<AggregateType, IdentifierType> {
@@ -37,11 +39,11 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
 
     private AggregateType instantiateAggregate(IdentifierType aggregateIdentifier) {
         try {
-            var aggregateConstructor = MethodHandles.lookup().findConstructor(reifiedAggregateType,
-                    MethodType.methodType(void.class, aggregateIdentifier.getClass()));
-            return reifiedAggregateType.cast(aggregateConstructor.invokeWithArguments(aggregateIdentifier));
-        } catch (Throwable ex) {
-            return ExceptionUtils.rethrow(ex);
+            var aggregateConstructor = reifiedAggregateType.getDeclaredConstructor(aggregateIdentifier.getClass());
+            aggregateConstructor.setAccessible(true);
+            return aggregateConstructor.newInstance(aggregateIdentifier);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            return ExceptionUtils.rethrow(e);
         }
     }
 

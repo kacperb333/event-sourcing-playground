@@ -13,11 +13,11 @@ public abstract class Event<IdentifierType> {
         this(aggregateIdentifier, 0L);
     }
 
-    IdentifierType getAggregateIdentifier() {
+    public IdentifierType getAggregateIdentifier() {
         return aggregateIdentifier;
     }
 
-    long getVersion() {
+    public long getVersion() {
         return version;
     }
 }

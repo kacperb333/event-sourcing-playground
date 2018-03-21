@@ -1,4 +1,6 @@
-package pl.kacperb333.java.eventsourcing;
+package pl.kacperb333.java.eventsourcing.test;
+
+import pl.kacperb333.java.eventsourcing.Event;
 
 class AggregateRenamedEvent extends Event<SimpleAggregateIdentifier> {
 

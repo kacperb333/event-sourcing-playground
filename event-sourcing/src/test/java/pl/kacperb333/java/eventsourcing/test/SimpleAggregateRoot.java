@@ -1,8 +1,9 @@
-package pl.kacperb333.java.eventsourcing;
+package pl.kacperb333.java.eventsourcing.test;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import pl.kacperb333.java.eventsourcing.AggregateRoot;
 
 class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
 
@@ -32,7 +33,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         return started;
     }
 
-    void apply(AggregateProcessStartedEvent processStartedEvent) {
+    private void apply(AggregateProcessStartedEvent processStartedEvent) {
         this.name = processStartedEvent.getName();
         this.balance = processStartedEvent.getInitialBalance();
         this.state = State.ACTIVE;
@@ -42,7 +43,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateRenamedEvent(getAggregateIdentifier(), getNextVersion(), newName));
     }
 
-    void apply(AggregateRenamedEvent renamedEvent) {
+    private void apply(AggregateRenamedEvent renamedEvent) {
         this.name = renamedEvent.getNewName();
     }
 
@@ -50,7 +51,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateCreditedEvent(getAggregateIdentifier(), getNextVersion(), creditAmount));
     }
 
-    void apply(AggregateCreditedEvent creditedEvent) {
+    private void apply(AggregateCreditedEvent creditedEvent) {
         this.balance += creditedEvent.getCreditValue();
     }
 
@@ -58,7 +59,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateDebitedEvent(getAggregateIdentifier(), getNextVersion(), debitAmount));
     }
 
-    void apply(AggregateDebitedEvent debitedEvent) {
+    private void apply(AggregateDebitedEvent debitedEvent) {
         this.balance -= debitedEvent.getDebitValue();
     }
 
@@ -66,7 +67,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateDisabledEvent(getAggregateIdentifier(), getNextVersion()));
     }
 
-    void apply(AggregateDisabledEvent disabledEvent) {
+    private void apply(AggregateDisabledEvent disabledEvent) {
         this.state = State.DISABLED;
     }
 
@@ -74,7 +75,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateActivatedEvent(getAggregateIdentifier(), getNextVersion()));
     }
 
-    void apply(AggregateActivatedEvent activatedEvent) {
+    private void apply(AggregateActivatedEvent activatedEvent) {
         this.state = State.ACTIVE;
     }
 

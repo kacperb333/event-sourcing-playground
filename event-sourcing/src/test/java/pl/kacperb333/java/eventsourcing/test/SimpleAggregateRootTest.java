@@ -1,7 +1,8 @@
-package pl.kacperb333.java.eventsourcing;
+package pl.kacperb333.java.eventsourcing.test;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pl.kacperb333.java.eventsourcing.*;
 
 import static org.testng.Assert.assertEquals;
 
@@ -38,7 +39,8 @@ public class SimpleAggregateRootTest {
     }
 
     @Test(expectedExceptions = NoExactResultException.class)
-    void shouldThrowExceptionWhenLoadingWithTooLittleExactVersion() throws NoExactResultException, AggregateNotFoundException {
+    void shouldThrowExceptionWhenLoadingWithTooLittleExactVersion()
+            throws NoExactResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -47,7 +49,8 @@ public class SimpleAggregateRootTest {
     }
 
     @Test(expectedExceptions = NoExactResultException.class)
-    void shouldThrowExceptionWhenLoadingWithTooGreatExactVersion() throws NoExactResultException, AggregateNotFoundException {
+    void shouldThrowExceptionWhenLoadingWithTooGreatExactVersion()
+            throws NoExactResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -56,7 +59,8 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void shouldLoadAggregateWithExactLeastExpectedVersion() throws NoExpectedResultException, AggregateNotFoundException {
+    void shouldLoadAggregateWithExactLeastExpectedVersion()
+            throws NoExpectedResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -66,7 +70,8 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void shouldLoadAggregateWithLeastExpectedVersionLessThanActual() throws NoExpectedResultException, AggregateNotFoundException {
+    void shouldLoadAggregateWithLeastExpectedVersionLessThanActual()
+            throws NoExpectedResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -76,11 +81,35 @@ public class SimpleAggregateRootTest {
     }
 
     @Test(expectedExceptions = NoExpectedResultException.class)
-    void shouldThrowExceptionWhenLoadingWithLeastExpectedVersionGreaterThanActual() throws NoExpectedResultException, AggregateNotFoundException {
+    void shouldThrowExceptionWhenLoadingWithLeastExpectedVersionGreaterThanActual()
+            throws NoExpectedResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
+        simpleAggregateRepository.loadAtLeast(identifier, 5L);
+    }
+
+    @Test(expectedExceptions = AggregateNotFoundException.class)
+    void shouldThrowExceptionWhenLoadingNonExistingAggregate() throws AggregateNotFoundException {
+        var identifier = new SimpleAggregateIdentifier("Nonexistent");
+
+        simpleAggregateRepository.load(identifier);
+    }
+
+    @Test(expectedExceptions = AggregateNotFoundException.class)
+    void shouldThrowExceptionWhenLoadingNonExistingAggregateWithExpectedVersion()
+            throws AggregateNotFoundException, NoExactResultException {
+        var identifier = new SimpleAggregateIdentifier("Nonexistent");
+
+        simpleAggregateRepository.loadExact(identifier, 5L);
+    }
+
+    @Test(expectedExceptions = AggregateNotFoundException.class)
+    void shouldThrowExceptionWhenLoadingNonExistingAggregateWithMinimumVersion()
+            throws AggregateNotFoundException, NoExpectedResultException {
+        var identifier = new SimpleAggregateIdentifier("Nonexistent");
+
         simpleAggregateRepository.loadAtLeast(identifier, 5L);
     }
 

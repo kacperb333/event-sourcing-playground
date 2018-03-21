@@ -1,6 +1,6 @@
 package pl.kacperb333.java.eventsourcing;
 
-class AggregateNotFoundException extends Exception {
+public class AggregateNotFoundException extends Exception {
     private final Class<?> aggregateType;
     private final Object aggregateIdentifier;
 

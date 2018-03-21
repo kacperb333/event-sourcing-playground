@@ -1,4 +1,4 @@
-package pl.kacperb333.java.eventsourcing;
+package pl.kacperb333.java.eventsourcing.test;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

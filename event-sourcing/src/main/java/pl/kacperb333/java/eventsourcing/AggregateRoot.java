@@ -4,6 +4,8 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,11 +15,11 @@ public abstract class AggregateRoot<IdentifierType> {
 
     public abstract IdentifierType getAggregateIdentifier();
 
-    long getVersion() {
+    public long getVersion() {
         return version;
     }
 
-    long getNextVersion() {
+    protected long getNextVersion() {
         return version + 1;
     }
 
@@ -38,11 +40,11 @@ public abstract class AggregateRoot<IdentifierType> {
     private void applyChange(Event<?> event) {
         Class<?> eventType = event.getClass();
         try {
-            var applyEventMethod = MethodHandles.lookup().findVirtual(
-                    this.getClass(), "apply", MethodType.methodType(void.class, eventType));
-            applyEventMethod.invokeWithArguments(this, event);
+            Method method = this.getClass().getDeclaredMethod("apply", eventType);
+            method.setAccessible(true);
+            method.invoke(this, event);
             version = event.getVersion();
-        } catch (Throwable ex) {
+        } catch (SecurityException | IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             ExceptionUtils.rethrow(ex);
         }
     }
