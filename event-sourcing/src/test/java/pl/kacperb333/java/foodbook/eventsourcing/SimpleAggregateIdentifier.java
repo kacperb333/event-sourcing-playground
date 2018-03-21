@@ -2,6 +2,7 @@ package pl.kacperb333.java.foodbook.eventsourcing;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 class SimpleAggregateIdentifier {
     private final String uuid;
@@ -28,5 +29,12 @@ class SimpleAggregateIdentifier {
         return new HashCodeBuilder(17, 37)
                 .append(uuid)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("uuid", uuid)
+                .toString();
     }
 }

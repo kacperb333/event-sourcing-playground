@@ -19,7 +19,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void loadedAggregateShouldHaveCorrectStateAfterSaving() {
+    void loadedAggregateShouldHaveCorrectStateAfterSaving() throws AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -30,7 +30,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void shouldLoadAggregateWithExactExpectedVersion() throws NoExactResultException {
+    void shouldLoadAggregateWithExactExpectedVersion() throws NoExactResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -40,7 +40,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test(expectedExceptions = NoExactResultException.class)
-    void shouldThrowExceptionWhenLoadingWithTooLittleExactVersion() throws NoExactResultException {
+    void shouldThrowExceptionWhenLoadingWithTooLittleExactVersion() throws NoExactResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -49,7 +49,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test(expectedExceptions = NoExactResultException.class)
-    void shouldThrowExceptionWhenLoadingWithTooGreatExactVersion() throws NoExactResultException {
+    void shouldThrowExceptionWhenLoadingWithTooGreatExactVersion() throws NoExactResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -58,7 +58,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void shouldLoadAggregateWithExactLeastExpectedVersion() throws NoExpectedResultException {
+    void shouldLoadAggregateWithExactLeastExpectedVersion() throws NoExpectedResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -68,7 +68,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test
-    void shouldLoadAggregateWithLeastExpectedVersionLessThanActual() throws NoExpectedResultException {
+    void shouldLoadAggregateWithLeastExpectedVersionLessThanActual() throws NoExpectedResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 
@@ -78,7 +78,7 @@ public class SimpleAggregateRootTest {
     }
 
     @Test(expectedExceptions = NoExpectedResultException.class)
-    void shouldThrowExceptionWhenLoadingWithLeastExpectedVersionGreaterThanActual() throws NoExpectedResultException {
+    void shouldThrowExceptionWhenLoadingWithLeastExpectedVersionGreaterThanActual() throws NoExpectedResultException, AggregateNotFoundException {
         var identifier = new SimpleAggregateIdentifier("ABC");
         var aggregate = provideAggregate(identifier);
 

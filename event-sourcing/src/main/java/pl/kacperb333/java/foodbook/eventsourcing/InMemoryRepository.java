@@ -1,5 +1,7 @@
 package pl.kacperb333.java.foodbook.eventsourcing;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
@@ -23,23 +25,31 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
     }
 
     @Override
-    public AggregateType load(IdentifierType aggregateIdentifier) {
-        try {
-            var aggregateConstructor = MethodHandles.lookup()
-                    .findConstructor(reifiedAggregateType, MethodType.methodType(void.class, aggregateIdentifier.getClass()));
+    public AggregateType load(IdentifierType aggregateIdentifier) throws AggregateNotFoundException {
+        var aggregate = instantiateAggregate(aggregateIdentifier);
 
-            var aggregate = reifiedAggregateType.cast(
-                    aggregateConstructor.invokeWithArguments(aggregateIdentifier));
-            aggregate.applyHistory(underlyingEventStore);
-            return aggregate;
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
+        var existingAggregateEvents = underlyingEventStore.getCommittedEvents(aggregateIdentifier);
+        if (existingAggregateEvents.isEmpty()) {
+            throw new AggregateNotFoundException(reifiedAggregateType, aggregateIdentifier);
+        }
+        existingAggregateEvents.forEach(aggregate::applyExistingEvent);
+
+        return aggregate;
+    }
+
+    private AggregateType instantiateAggregate(IdentifierType aggregateIdentifier) {
+        try {
+            var aggregateConstructor = MethodHandles.lookup().findConstructor(reifiedAggregateType,
+                    MethodType.methodType(void.class, aggregateIdentifier.getClass()));
+            return reifiedAggregateType.cast(aggregateConstructor.invokeWithArguments(aggregateIdentifier));
+        } catch (Throwable ex) {
+            return ExceptionUtils.rethrow(ex);
         }
     }
 
     @Override
     public AggregateType loadExact(IdentifierType aggregateIdentifier, long expectedVersion)
-            throws NoExactResultException{
+            throws AggregateNotFoundException, NoExactResultException{
 
         var loadedAggregate = load(aggregateIdentifier);
         if (loadedAggregate.getVersion() != expectedVersion) {
@@ -51,7 +61,7 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
 
     @Override
     public AggregateType loadAtLeast(IdentifierType aggregateIdentifier, long leastExpectedVersion)
-            throws NoExpectedResultException {
+            throws AggregateNotFoundException, NoExpectedResultException {
 
         var loadedAggregate = load(aggregateIdentifier);
         if (loadedAggregate.getVersion() < leastExpectedVersion) {

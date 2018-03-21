@@ -2,6 +2,7 @@ package pl.kacperb333.java.foodbook.eventsourcing;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
 
@@ -117,5 +118,15 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
                 .append(balance)
                 .append(state)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("identifier", identifier)
+                .append("name", name)
+                .append("balance", balance)
+                .append("state", state)
+                .toString();
     }
 }

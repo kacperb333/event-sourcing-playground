@@ -4,9 +4,9 @@ public interface Repository<AggregateType extends AggregateRoot<IdentifierType>,
     default void save(AggregateType toSave) { save(toSave, 0L); }
     void save(AggregateType toSave, long expectedVersion);
 
-    AggregateType load(IdentifierType aggregateIdentifier);
+    AggregateType load(IdentifierType aggregateIdentifier) throws AggregateNotFoundException;
     AggregateType loadExact(IdentifierType aggregateIdentifier, long expectedVersion)
-            throws NoExactResultException;
+            throws AggregateNotFoundException, NoExactResultException;
     AggregateType loadAtLeast(IdentifierType aggregateIdentifier, long leastExpectedVersion)
-            throws NoExpectedResultException;
+            throws AggregateNotFoundException, NoExpectedResultException;
 }

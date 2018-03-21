@@ -41,6 +41,6 @@ public class InMemoryEventStore<IdentifierType> implements EventStore<Identifier
 
     @Override
     public List<Event<IdentifierType>> getCommittedEvents(IdentifierType aggregateIdentifier) {
-        return events.get(aggregateIdentifier);
+        return events.getOrDefault(aggregateIdentifier, List.of());
     }
 }

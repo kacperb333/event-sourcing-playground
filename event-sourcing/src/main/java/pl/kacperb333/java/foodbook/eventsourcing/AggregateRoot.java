@@ -1,5 +1,7 @@
 package pl.kacperb333.java.foodbook.eventsourcing;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.LinkedList;
@@ -24,18 +26,13 @@ public abstract class AggregateRoot<IdentifierType> {
         uncommittedEvents.add(event);
     }
 
+    void applyExistingEvent(Event<IdentifierType> event) {
+        applyChange(event);
+    }
+
     void commitEvents(EventStore<IdentifierType> eventStore, long expectedVersion) {
         eventStore.commit(getAggregateIdentifier(), uncommittedEvents, expectedVersion);
         uncommittedEvents.clear();
-    }
-
-    void applyHistory(EventStore<IdentifierType> eventStore) {
-        var existingAggregateEvents = eventStore.getCommittedEvents(getAggregateIdentifier());
-        if (existingAggregateEvents.isEmpty()) {
-            throw new IllegalArgumentException(
-                    String.format("Aggregate (%s) identifier by (%s) does not exist", this, getAggregateIdentifier()));
-        }
-        existingAggregateEvents.forEach(this::applyChange);
     }
 
     private void applyChange(Event<?> event) {
@@ -46,7 +43,7 @@ public abstract class AggregateRoot<IdentifierType> {
             applyEventMethod.invokeWithArguments(this, event);
             version = event.getVersion();
         } catch (Throwable ex) {
-            throw new RuntimeException(ex);
+            ExceptionUtils.rethrow(ex);
         }
     }
 }
