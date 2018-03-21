@@ -20,29 +20,29 @@ public class SimpleAggregateRootTest {
 
     @Test
     void loadedAggregateShouldHaveCorrectStateAfterSaving() {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
-        SimpleAggregateRoot loadedAggregate = simpleAggregateRepository.load(identifier);
+        var loadedAggregate = simpleAggregateRepository.load(identifier);
 
         assertAggregate(identifier, loadedAggregate);
     }
 
     @Test
     void shouldLoadAggregateWithExactExpectedVersion() throws NoExactResultException {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
-        SimpleAggregateRoot loaded = simpleAggregateRepository.loadExact(identifier, 4L);
+        var loaded = simpleAggregateRepository.loadExact(identifier, 4L);
         assertAggregate(identifier, loaded);
     }
 
     @Test(expectedExceptions = NoExactResultException.class)
     void shouldThrowExceptionWhenLoadingWithTooLittleExactVersion() throws NoExactResultException {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
         simpleAggregateRepository.loadExact(identifier, 3L);
@@ -50,8 +50,8 @@ public class SimpleAggregateRootTest {
 
     @Test(expectedExceptions = NoExactResultException.class)
     void shouldThrowExceptionWhenLoadingWithTooGreatExactVersion() throws NoExactResultException {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
         simpleAggregateRepository.loadExact(identifier, 5L);
@@ -59,28 +59,28 @@ public class SimpleAggregateRootTest {
 
     @Test
     void shouldLoadAggregateWithExactLeastExpectedVersion() throws NoExpectedResultException {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
-        SimpleAggregateRoot loaded = simpleAggregateRepository.loadAtLeast(identifier, 4L);
+        var loaded = simpleAggregateRepository.loadAtLeast(identifier, 4L);
         assertAggregate(identifier, loaded);
     }
 
     @Test
     void shouldLoadAggregateWithLeastExpectedVersionLessThanActual() throws NoExpectedResultException {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
-        SimpleAggregateRoot loaded = simpleAggregateRepository.loadAtLeast(identifier, 3L);
+        var loaded = simpleAggregateRepository.loadAtLeast(identifier, 3L);
         assertAggregate(identifier, loaded);
     }
 
     @Test(expectedExceptions = NoExpectedResultException.class)
     void shouldThrowExceptionWhenLoadingWithLeastExpectedVersionGreaterThanActual() throws NoExpectedResultException {
-        SimpleAggregateIdentifier identifier = new SimpleAggregateIdentifier("ABC");
-        SimpleAggregateRoot aggregate = provideAggregate(identifier);
+        var identifier = new SimpleAggregateIdentifier("ABC");
+        var aggregate = provideAggregate(identifier);
 
         simpleAggregateRepository.save(aggregate);
         simpleAggregateRepository.loadAtLeast(identifier, 5L);

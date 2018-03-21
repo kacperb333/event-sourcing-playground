@@ -14,7 +14,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
     private int balance;
     private State state;
 
-    private SimpleAggregateRoot(SimpleAggregateIdentifier identifier) {
+    SimpleAggregateRoot(SimpleAggregateIdentifier identifier) {
         this.identifier = identifier;
     }
 
@@ -31,7 +31,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         return started;
     }
 
-    private void apply(AggregateProcessStartedEvent processStartedEvent) {
+    void apply(AggregateProcessStartedEvent processStartedEvent) {
         this.name = processStartedEvent.getName();
         this.balance = processStartedEvent.getInitialBalance();
         this.state = State.ACTIVE;
@@ -41,7 +41,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateRenamedEvent(getAggregateIdentifier(), getNextVersion(), newName));
     }
 
-    private void apply(AggregateRenamedEvent renamedEvent) {
+    void apply(AggregateRenamedEvent renamedEvent) {
         this.name = renamedEvent.getNewName();
     }
 
@@ -49,7 +49,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateCreditedEvent(getAggregateIdentifier(), getNextVersion(), creditAmount));
     }
 
-    private void apply(AggregateCreditedEvent creditedEvent) {
+    void apply(AggregateCreditedEvent creditedEvent) {
         this.balance += creditedEvent.getCreditValue();
     }
 
@@ -57,7 +57,7 @@ class SimpleAggregateRoot extends AggregateRoot<SimpleAggregateIdentifier> {
         applyEvent(new AggregateDebitedEvent(getAggregateIdentifier(), getNextVersion(), debitAmount));
     }
 
-    private void apply(AggregateDebitedEvent debitedEvent) {
+    void apply(AggregateDebitedEvent debitedEvent) {
         this.balance -= debitedEvent.getDebitValue();
     }
 

@@ -1,5 +1,7 @@
 package pl.kacperb333.java.foodbook.eventsourcing;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -23,16 +25,15 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
     @Override
     public AggregateType load(IdentifierType aggregateIdentifier) {
         try {
-            Constructor<AggregateType> aggregateConstructor =
-                    reifiedAggregateType.getDeclaredConstructor(aggregateIdentifier.getClass());
-            aggregateConstructor.setAccessible(true);
+            var aggregateConstructor = MethodHandles.lookup()
+                    .findConstructor(reifiedAggregateType, MethodType.methodType(void.class, aggregateIdentifier.getClass()));
 
-            AggregateType aggregate = aggregateConstructor.newInstance(aggregateIdentifier);
+            var aggregate = reifiedAggregateType.cast(
+                    aggregateConstructor.invokeWithArguments(aggregateIdentifier));
             aggregate.applyHistory(underlyingEventStore);
             return aggregate;
-        } catch (NoSuchMethodException | IllegalAccessException |
-                InstantiationException | InvocationTargetException e) {
-            throw new IllegalStateException(e);
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -40,7 +41,7 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
     public AggregateType loadExact(IdentifierType aggregateIdentifier, long expectedVersion)
             throws NoExactResultException{
 
-        AggregateType loadedAggregate = load(aggregateIdentifier);
+        var loadedAggregate = load(aggregateIdentifier);
         if (loadedAggregate.getVersion() != expectedVersion) {
             throw new NoExactResultException(expectedVersion, loadedAggregate.getVersion());
         }
@@ -52,7 +53,7 @@ public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierTy
     public AggregateType loadAtLeast(IdentifierType aggregateIdentifier, long leastExpectedVersion)
             throws NoExpectedResultException {
 
-        AggregateType loadedAggregate = load(aggregateIdentifier);
+        var loadedAggregate = load(aggregateIdentifier);
         if (loadedAggregate.getVersion() < leastExpectedVersion) {
             throw new NoExpectedResultException(leastExpectedVersion, loadedAggregate.getVersion());
         }

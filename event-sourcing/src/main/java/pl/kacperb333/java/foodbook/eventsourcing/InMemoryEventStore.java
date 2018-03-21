@@ -19,14 +19,14 @@ public class InMemoryEventStore<IdentifierType> implements EventStore<Identifier
     public void commit(IdentifierType aggregateIdentifier,
                        List<? extends Event<IdentifierType>> eventsToCommit,
                        long expectedVersion) {
-        List<Event<IdentifierType>> currentEvents = events.getOrDefault(aggregateIdentifier, new LinkedList<>());
+        var currentEvents = events.getOrDefault(aggregateIdentifier, new LinkedList<>());
         events.putIfAbsent(aggregateIdentifier, currentEvents);
 
         if (!currentEvents.isEmpty() && currentEvents.get(currentEvents.size() - 1).getVersion() != expectedVersion) {
             throw new ConcurrentModificationException();
         }
 
-        List<Event<IdentifierType>> newEvents = new LinkedList<>(currentEvents);
+        var newEvents = new LinkedList<>(currentEvents);
         newEvents.addAll(eventsToCommit);
         if (!events.replace(aggregateIdentifier, currentEvents, newEvents)) {
             throw new ConcurrentModificationException();
