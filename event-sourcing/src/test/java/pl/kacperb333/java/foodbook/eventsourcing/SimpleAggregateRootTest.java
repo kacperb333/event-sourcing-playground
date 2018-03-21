@@ -95,7 +95,7 @@ public class SimpleAggregateRootTest {
     private static final long EXPECTED_VERSION = 4L;
 
     private SimpleAggregateRoot provideAggregate(SimpleAggregateIdentifier identifier) {
-        SimpleAggregateRoot aggregate = SimpleAggregateRoot.startProcess(identifier, INITIAL_NAME, INITIAL_BALANCE);
+        var aggregate = SimpleAggregateRoot.startProcess(identifier, INITIAL_NAME, INITIAL_BALANCE);
         aggregate.rename(CHANGED_NAME);
         aggregate.debit(DEBIT_AMOUNT);
         aggregate.credit(CREDIT_AMOUNT);
