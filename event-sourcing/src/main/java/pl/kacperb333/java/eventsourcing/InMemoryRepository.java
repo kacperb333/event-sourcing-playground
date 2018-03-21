@@ -1,11 +1,9 @@
-package pl.kacperb333.java.foodbook.eventsourcing;
+package pl.kacperb333.java.eventsourcing;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 public class InMemoryRepository<AggregateType extends AggregateRoot<IdentifierType>, IdentifierType>
         implements Repository<AggregateType, IdentifierType> {

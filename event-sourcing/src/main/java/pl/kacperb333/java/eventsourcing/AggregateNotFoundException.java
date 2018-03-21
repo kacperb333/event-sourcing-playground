@@ -1,4 +1,4 @@
-package pl.kacperb333.java.foodbook.eventsourcing;
+package pl.kacperb333.java.eventsourcing;
 
 class AggregateNotFoundException extends Exception {
     private final Class<?> aggregateType;
